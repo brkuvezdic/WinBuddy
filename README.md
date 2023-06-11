@@ -1,4 +1,4 @@
-# winbuddy
+# win-buddy
 
 ## Project setup
 ```
