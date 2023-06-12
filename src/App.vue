@@ -21,7 +21,7 @@
           ><h1 style="text-align: center">Login</h1>
         </router-link>
         <router-link to="/register"
-          ><h1 style="text-align: center">Register</h1>
+          ><h1 style="text-align: center">Registerr</h1>
         </router-link>
       </nav>
       <router-view />
