@@ -10,7 +10,7 @@
               <label for="exampleInputEmail1">Email address</label>
               <input
                 type="email"
-                v-model="username"
+                v-model="email"
                 class="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
@@ -53,19 +53,26 @@
 </template>
 
 <script>
-import firebase from "@/firebase";
+import { auth, createUserWithEmailAndPassword } from "@/firebase.js";
 export default {
   name: "Register",
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
       passwordRepeat: "",
     };
   },
   methods: {
     register() {
-      console.log(firebase);
+      createUserWithEmailAndPassword(auth, this.email, this.password)
+        .then(function () {
+          console.log("Uspjesna registracija");
+        })
+        .catch(function (error) {
+          console.error("Doslo je do greske", error);
+        });
+      console.log("Nastavak");
     },
   },
 };
