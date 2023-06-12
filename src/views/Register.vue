@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import firebase from "@/firebase";
 export default {
   name: "Register",
   data() {
@@ -64,7 +65,7 @@ export default {
   },
   methods: {
     register() {
-      alert("ok");
+      console.log(firebase);
     },
   },
 };
