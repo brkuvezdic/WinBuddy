@@ -14,18 +14,21 @@
         </a>
 
         <div class="nav"></div>
-        <router-link to="/"
+        <router-link v-if="!store.currentUser" to="/"
           ><h1 style="text-align: center">Home</h1>
         </router-link>
-        <router-link to="/login"
+        <router-link v-if="!store.currentUser" to="/login"
           ><h1 style="text-align: center">Login</h1>
         </router-link>
         <router-link to="/register"
-          ><h1 style="text-align: center">Registerr</h1>
+          ><h1 v-if="!store.currentUser" style="text-align: center">
+            Registerr
+          </h1>
         </router-link>
 
-        <a href="#" @click="logout"><h1>Logout</h1></a>
+        <a v-if="store.currentUser" href="#" @click="logout"><h1>Logout</h1></a>
       </nav>
+
       <router-view />
     </v-main>
   </v-app>
@@ -37,6 +40,7 @@
 }
 </style>
 <script>
+import store from "@/store";
 import { auth, onAuthStateChanged, getAuth, signOut } from "@/firebase";
 
 export default {
@@ -44,7 +48,7 @@ export default {
 
   data() {
     return {
-      isAuthenticated: false,
+      store,
     };
   },
   methods: {
@@ -53,7 +57,9 @@ export default {
       signOut(auth)
         .then(() => {
           console.log("odjavljen");
-          this.$router.push({ path: "login" });
+          if (this.$route.path !== "/login") {
+            this.$router.push({ path: "/login" });
+          }
         })
         .catch((error) => {
           console.log("GRESKAAA", error.code);
@@ -64,9 +70,12 @@ export default {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("Authenticated");
-        this.isAuthenticated = true;
+        console.log("Koji user je logiran=", user.email);
+        store.currentUser = user.email;
       } else {
         console.log("Not Authenticated");
+        console.log("Nema usera");
+        store.currentUser = null;
         this.isAuthenticated = false;
       }
     });
