@@ -23,6 +23,8 @@
         <router-link to="/register"
           ><h1 style="text-align: center">Registerr</h1>
         </router-link>
+
+        <a href="#" @click="logout"><h1>Logout</h1></a>
       </nav>
       <router-view />
     </v-main>
@@ -35,12 +37,39 @@
 }
 </style>
 <script>
-import { firebase } from "@/firebase";
+import { auth, onAuthStateChanged, getAuth, signOut } from "@/firebase";
+
 export default {
   name: "App",
 
-  data: () => ({
-    //
-  }),
+  data() {
+    return {
+      isAuthenticated: false,
+    };
+  },
+  methods: {
+    logout() {
+      const auth = getAuth();
+      signOut(auth)
+        .then(() => {
+          console.log("odjavljen");
+          this.$router.push({ path: "login" });
+        })
+        .catch((error) => {
+          console.log("GRESKAAA", error.code);
+        });
+    },
+  },
+  beforeCreate() {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("Authenticated");
+        this.isAuthenticated = true;
+      } else {
+        console.log("Not Authenticated");
+        this.isAuthenticated = false;
+      }
+    });
+  },
 };
 </script>

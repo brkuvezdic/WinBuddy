@@ -59,6 +59,8 @@ export default {
         .then((userCredential) => {
           const user = userCredential.user;
           console.log("Uspjesna prijava", userCredential);
+
+          this.$router.replace({ name: "home" });
         })
         .catch((error) => {
           const errorCode = error.code;
