@@ -3,11 +3,28 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {
   getAuth,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
+  updatePassword,
   signOut,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  confirmPasswordReset,
+  beforeAuthStateChanged,
+  onAuthStateChanged,
 } from "firebase/auth";
+
+import {
+  doc,
+  addDoc,
+  getDoc,
+  setDoc,
+  getDocs,
+  getCount,
+  getFirestore,
+  collection,
+} from "firebase/firestore/lite";
+
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,13 +44,27 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
+const db = getFirestore(app);
 
 export {
   app,
   auth,
+  storage,
+  db,
   getAuth,
+  doc,
+  getDoc,
+  setDoc,
+  addDoc,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  onAuthStateChanged,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  signOut,
+  updatePassword,
+  collection,
 };

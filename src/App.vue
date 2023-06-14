@@ -1,9 +1,9 @@
 <template>
-  <v-app>
+  <v-app style="background-color: dimgray" class="dark-bg">
     <v-main>
       <!-- Image and text -->
       <nav class="navbar navbar-light bg-dark">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
           <img
             src="@/assets/game-console.png"
             width="60"
@@ -13,38 +13,83 @@
           WinBuddy
         </a>
 
-        <div class="nav"></div>
-        <router-link v-if="!store.currentUser" to="/"
-          ><h1 style="text-align: center">Home</h1>
-        </router-link>
-        <router-link v-if="!store.currentUser" to="/login"
-          ><h1 style="text-align: center">Login</h1>
-        </router-link>
-        <router-link to="/register"
-          ><h1 v-if="!store.currentUser" style="text-align: center">
-            Registerr
-          </h1>
-        </router-link>
-
         <a v-if="store.currentUser" href="#" @click="logout"><h1>Logout</h1></a>
       </nav>
+      <router-link v-if="store.currentUser" to="/loggedin-home-screen">
+        <div
+          class="text-center"
+          v-show="$route.path !== '/loggedin-home-screen'"
+        >
+          <v-btn
+            color="primary"
+            class="mt-5"
+            @click="navigateToLoggedInHomeScreen"
+          >
+            Go to Logged In Home Screen
+          </v-btn>
+        </div>
+      </router-link>
 
       <router-view />
+      <div class="text-center" v-if="!store.currentUser">
+        <div class="login-register-container">
+          <router-link
+            v-if="$route.path !== '/login' && $route.path !== '/register'"
+            to="/login"
+          >
+            <button class="login-register-button">Login</button>
+          </router-link>
+          <router-link
+            v-if="$route.path !== '/register' && $route.path !== '/login'"
+            to="/register"
+          >
+            <button class="login-register-button">Register</button>
+          </router-link>
+        </div>
+      </div>
     </v-main>
   </v-app>
 </template>
 
 <style>
-#nav {
-  background-color: red !important;
+.mt-5 {
+  margin-top: 5rem;
+}
+.login-register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 20vh;
+}
+
+.login-register-button {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-register-button:hover {
+  background-color: #0056b3;
 }
 </style>
 <script>
 import store from "@/store";
 import { auth, onAuthStateChanged, getAuth, signOut } from "@/firebase";
+import MyComponent from "@/components/MyComponent.vue";
 
 export default {
   name: "App",
+  components: {
+    MyComponent,
+  },
 
   data() {
     return {

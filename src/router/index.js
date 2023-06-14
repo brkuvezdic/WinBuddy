@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
-
+import LoggedInHomeScreen from "@/views/LoggedInHomeScreen.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -18,6 +18,11 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Login.vue"),
+  },
+  {
+    path: "/loggedin-home-screen",
+    name: "LoggedInHomeScreen",
+    component: LoggedInHomeScreen,
   },
   {
     path: "/register",
