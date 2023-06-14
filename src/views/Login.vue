@@ -1,6 +1,8 @@
 <template>
   <div class="about">
-    <h1>LOGIN STRANICA</h1>
+    <h1 class="welcome-heading">
+      Welcome! Please log in with your information
+    </h1>
     <div class="container">
       <div class="row">
         <div class="col-sm"></div>
@@ -71,3 +73,25 @@ export default {
   },
 };
 </script>
+
+<style>
+.welcome-heading {
+  font-size: 28px;
+  color: #ff6200;
+  text-align: center;
+  margin-top: 50px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: fadeSlideDown 1s ease-in-out;
+}
+
+@keyframes fadeSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

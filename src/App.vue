@@ -2,7 +2,7 @@
   <v-app style="background-color: dimgray" class="dark-bg">
     <v-main>
       <!-- Image and text -->
-      <nav class="navbar navbar-light bg-dark">
+      <nav class="navbar navbar-custom">
         <a class="navbar-brand" href="/">
           <img
             src="@/assets/game-console.png"
@@ -13,8 +13,15 @@
           WinBuddy
         </a>
 
-        <a v-if="store.currentUser" href="#" @click="logout"><h1>Logout</h1></a>
+        <p v-if="store.currentUser" class="user-email move-left">
+          Current player: {{ store.currentUser.split("@")[0] }}
+        </p>
+
+        <button v-if="store.currentUser" class="logout-button" @click="logout">
+          Logout
+        </button>
       </nav>
+
       <router-link v-if="store.currentUser" to="/loggedin-home-screen">
         <div
           class="text-center"
@@ -52,6 +59,28 @@
 </template>
 
 <style>
+.move-left {
+  margin-left: -3%;
+}
+.logout-button {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #4b99ec;
+}
+.navbar-custom {
+  background-color: rgb(247, 103, 0);
+}
 .mt-5 {
   margin-top: 5rem;
 }
@@ -78,6 +107,13 @@
 
 .login-register-button:hover {
   background-color: #0056b3;
+}
+
+.user-email {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 18px;
 }
 </style>
 <script>
