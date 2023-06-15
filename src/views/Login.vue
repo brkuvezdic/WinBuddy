@@ -62,7 +62,7 @@ export default {
           const user = userCredential.user;
           console.log("Uspjesna prijava", userCredential);
 
-          this.$router.replace({ name: "home" });
+          this.$router.push({ name: "loggedinhomescreen" });
         })
         .catch((error) => {
           const errorCode = error.code;

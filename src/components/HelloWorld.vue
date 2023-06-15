@@ -1,11 +1,6 @@
 <template>
   <v-container>
-    <v-row class="text-center">
-      <h1>WINBUDDY</h1>
-      <h1 v-if="$route.path === '/'">
-        Connect with other gamers around the world
-      </h1>
-    </v-row>
+    <v-row class="text-center"> </v-row>
   </v-container>
 </template>
 

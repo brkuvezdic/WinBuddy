@@ -20,9 +20,10 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Login.vue"),
   },
   {
-    path: "/loggedin-home-screen",
-    name: "LoggedInHomeScreen",
-    component: LoggedInHomeScreen,
+    path: "/loggedinhomescreen",
+    name: "/loggedinhomescreen",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/LoggedInHomeScreen.vue"),
   },
   {
     path: "/register",

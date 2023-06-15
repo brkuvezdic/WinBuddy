@@ -22,20 +22,12 @@
         </button>
       </nav>
 
-      <router-link v-if="store.currentUser" to="/loggedin-home-screen">
-        <div
-          class="text-center"
-          v-show="$route.path !== '/loggedin-home-screen'"
-        >
-          <v-btn
-            color="primary"
-            class="mt-5"
-            @click="navigateToLoggedInHomeScreen"
-          >
-            Go to Logged In Home Screen
-          </v-btn>
-        </div>
-      </router-link>
+      <div>
+        <h1 class="title" v-if="!store.currentUser">WinBuddy</h1>
+        <h2 class="welcome-text" v-if="!store.currentUser">
+          Connect and play with other gamers around the world
+        </h2>
+      </div>
 
       <router-view />
       <div class="text-center" v-if="!store.currentUser">
@@ -114,6 +106,37 @@
   margin-top: 10px;
   font-weight: bold;
   font-size: 18px;
+}
+
+.welcome-text {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-top: 20px;
+}
+.title {
+  text-align: center;
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-top: 20px;
+  animation: flashy-animation 2s infinite;
+}
+
+@keyframes flashy-animation {
+  0% {
+    color: #ffffff;
+    text-shadow: none;
+  }
+  50% {
+    color: #ffcc00;
+    text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00, 0 0 30px #ffcc00;
+  }
+  100% {
+    color: #ffffff;
+    text-shadow: none;
+  }
 }
 </style>
 <script>
