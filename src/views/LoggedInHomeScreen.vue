@@ -12,7 +12,7 @@
             value="game1"
             v-model="selectedGames"
           />
-          <label for="game1"> League of Legends</label>
+          <label for="game1">League of Legends</label>
           <br />
           <input
             type="checkbox"
@@ -20,7 +20,7 @@
             value="game2"
             v-model="selectedGames"
           />
-          <label for="game2"> Tetris</label>
+          <label for="game2">Tetris</label>
           <br />
           <input
             type="checkbox"
@@ -28,7 +28,7 @@
             value="game3"
             v-model="selectedGames"
           />
-          <label for="game3"> F1@2023</label>
+          <label for="game3">F1@2023</label>
         </div>
       </div>
       <br />
@@ -91,42 +91,41 @@
             type="checkbox"
             id="language1"
             value="language1"
-            v-model="selectedLanguage"
+            v-model="selectedLanguages"
           />
-          <label for="game1">English</label>
+          <label for="language1">English</label>
           <br />
           <input
             type="checkbox"
             id="language2"
             value="language2"
-            v-model="selectedLanguage"
+            v-model="selectedLanguages"
           />
-          <label for="game2"> German</label>
+          <label for="language2">German</label>
           <br />
           <input
             type="checkbox"
             id="language3"
             value="language3"
-            v-model="selectedLanguage"
+            v-model="selectedLanguages"
           />
-          <label for="game3"> French</label>
+          <label for="language3">French</label>
           <br />
           <input
             type="checkbox"
             id="language4"
             value="language4"
-            v-model="selectedLanguage"
+            v-model="selectedLanguages"
           />
-          <label for="game4"> Spanish</label>
+          <label for="language4">Spanish</label>
           <br />
           <input
             type="checkbox"
             id="language5"
             value="language5"
-            v-model="selectedLanguage"
+            v-model="selectedLanguages"
           />
-
-          <label for="game5"> Croatian</label>
+          <label for="language5">Croatian</label>
         </div>
       </div>
       <br />
@@ -149,15 +148,7 @@
 </template>
 
 <script>
-import {
-  auth,
-  addDoc,
-  onAuthStateChanged,
-  getAuth,
-  signOut,
-  db,
-  collection,
-} from "@/firebase";
+import { addDoc, collection, db } from "@/firebase";
 
 export default {
   data() {
@@ -166,38 +157,30 @@ export default {
       selectedVoicePrograms: [],
       selectedStartTime: "",
       selectedEndTime: "",
-      selectedLanguage: "",
+      selectedLanguages: [],
       selectedGamerType: "",
     };
   },
   methods: {
     submitForm() {
-      console.log("Submit stisnut");
-      // Prepare the data to be sent to Firebase
       const data = {
         selectedGames: this.selectedGames,
         selectedVoicePrograms: this.selectedVoicePrograms,
         selectedStartTime: this.selectedStartTime,
         selectedEndTime: this.selectedEndTime,
-        selectedLanguage: this.selectedLanguage,
+        selectedLanguages: this.selectedLanguages,
         selectedGamerType: this.selectedGamerType,
       };
 
-      console.log("Odabrane igrice " + this.selectedGames);
-      console.log("Odabrani programi " + this.selectedVoicePrograms);
-      console.log("Odabrano vrijeme " + this.selectedAvailability);
-      console.log("Odabrani jezik " + this.selectedLanguage);
-
-      // Send the data to Firebase Firestore
-      // Replace 'your-collection' with the actual collection name in your Firebase database
       addDoc(collection(db, "EditUserProfileCollection"), data)
         .then(() => {
           console.log("Form data sent to Firebase.");
-          // Reset the form fields
           this.selectedGames = [];
           this.selectedVoicePrograms = [];
-          this.selectedAvailability = "";
-          this.selectedLanguage = "";
+          this.selectedStartTime = "";
+          this.selectedEndTime = "";
+          this.selectedLanguages = [];
+          this.selectedGamerType = "";
         })
         .catch((error) => {
           console.error("Error sending form data to Firebase:", error);
@@ -223,7 +206,7 @@ h1 {
 }
 
 .form-container {
-  width: 300px;
+  width: 400px;
   padding: 2rem;
   border: 1px solid #ccc;
   border-radius: 5px;
