@@ -16,6 +16,18 @@
         <p v-if="store.currentUser" class="user-email move-left">
           Current player: {{ store.currentUser.split("@")[0] }}
         </p>
+        <router-link
+          v-if="store.currentUser && $route.path !== '/loggedinhomescreen'"
+          to="/loggedinhomescreen"
+        >
+          <v-btn
+            color="primary"
+            class="mt-5"
+            @click="navigateToLoggedInHomeScreen"
+          >
+            Edit Profile
+          </v-btn>
+        </router-link>
 
         <button v-if="store.currentUser" class="logout-button" @click="logout">
           Logout
@@ -169,6 +181,9 @@ export default {
           console.log("GRESKAAA", error.code);
         });
     },
+  },
+  navigateToLoggedInHomeScreen() {
+    this.$router.push({ path: "/loggedinhomescreen" });
   },
   beforeCreate() {
     onAuthStateChanged(auth, (user) => {

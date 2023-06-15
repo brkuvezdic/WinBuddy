@@ -1,6 +1,8 @@
 <template>
   <div class="about">
-    <h1>REGISTER STRANICA</h1>
+    <h1 class="welcome-heading">
+      Welcome! Please register with your information
+    </h1>
     <div class="container">
       <div class="row">
         <div class="col-sm"></div>
@@ -60,7 +62,16 @@
     </div>
   </div>
 </template>
-
+<style>
+.welcome-heading {
+  font-size: 28px;
+  color: #ff6200;
+  text-align: center;
+  margin-top: 50px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: fadeSlideDown 1s ease-in-out;
+}
+</style>
 <script>
 import { auth, createUserWithEmailAndPassword } from "@/firebase.js";
 
