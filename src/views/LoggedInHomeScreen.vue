@@ -12,7 +12,7 @@
             value="game1"
             v-model="selectedGames"
           />
-          <label for="game1">League of Legends</label>
+          <label for="game1"> League of Legends</label>
           <br />
           <input
             type="checkbox"
@@ -20,7 +20,7 @@
             value="game2"
             v-model="selectedGames"
           />
-          <label for="game2">Tetris</label>
+          <label for="game2"> Tetris</label>
           <br />
           <input
             type="checkbox"
@@ -28,7 +28,7 @@
             value="game3"
             v-model="selectedGames"
           />
-          <label for="game3">F1@2023</label>
+          <label for="game3"> F1@2023</label>
         </div>
       </div>
       <br />
@@ -93,7 +93,7 @@
             value="language1"
             v-model="selectedLanguages"
           />
-          <label for="language1">English</label>
+          <label for="game1">English</label>
           <br />
           <input
             type="checkbox"
@@ -101,7 +101,7 @@
             value="language2"
             v-model="selectedLanguages"
           />
-          <label for="language2">German</label>
+          <label for="game2"> German</label>
           <br />
           <input
             type="checkbox"
@@ -109,7 +109,7 @@
             value="language3"
             v-model="selectedLanguages"
           />
-          <label for="language3">French</label>
+          <label for="game3"> French</label>
           <br />
           <input
             type="checkbox"
@@ -117,32 +117,31 @@
             value="language4"
             v-model="selectedLanguages"
           />
-          <label for="language4">Spanish</label>
-          <br />
-          <input
-            type="checkbox"
-            id="language5"
-            value="language5"
-            v-model="selectedLanguages"
-          />
-          <label for="language5">Croatian</label>
+          <label for="game3"> Spanish</label>
         </div>
       </div>
-      <br />
+
       <div class="form-group">
-        <label for="selectedGamerType"
-          >Are you a competitive or relaxed gamer?</label
-        >
+        <label for="selectedGamerType">Select what type of gamer are you</label>
         <select
           v-model="selectedGamerType"
           class="form-control"
           id="selectedGamerType"
         >
+          <option value="">Please select</option>
           <option value="competitive">Competitive</option>
           <option value="relaxed">Relaxed</option>
         </select>
       </div>
+
       <button type="submit" class="submit-button">Submit</button>
+
+      <div v-if="isFormIncomplete" class="error-message">
+        Please fill in all the required fields.
+      </div>
+      <div v-if="isFormSent" class="success-message">
+        Form submitted successfully!
+      </div>
     </form>
   </div>
 </template>
@@ -159,32 +158,46 @@ export default {
       selectedEndTime: "",
       selectedLanguages: [],
       selectedGamerType: "",
+      isFormIncomplete: false,
+      isFormSent: false,
     };
   },
   methods: {
     submitForm() {
-      const data = {
-        selectedGames: this.selectedGames,
-        selectedVoicePrograms: this.selectedVoicePrograms,
-        selectedStartTime: this.selectedStartTime,
-        selectedEndTime: this.selectedEndTime,
-        selectedLanguages: this.selectedLanguages,
-        selectedGamerType: this.selectedGamerType,
-      };
+      if (
+        this.selectedGames.length > 0 &&
+        this.selectedVoicePrograms.length > 0 &&
+        this.selectedStartTime !== "" &&
+        this.selectedEndTime !== "" &&
+        this.selectedLanguages.length > 0 &&
+        this.selectedGamerType !== ""
+      ) {
+        this.isFormIncomplete = false;
 
-      addDoc(collection(db, "EditUserProfileCollection"), data)
-        .then(() => {
-          console.log("Form data sent to Firebase.");
-          this.selectedGames = [];
-          this.selectedVoicePrograms = [];
-          this.selectedStartTime = "";
-          this.selectedEndTime = "";
-          this.selectedLanguages = [];
-          this.selectedGamerType = "";
-        })
-        .catch((error) => {
-          console.error("Error sending form data to Firebase:", error);
-        });
+        const data = {
+          games: this.selectedGames,
+          voicePrograms: this.selectedVoicePrograms,
+          startTime: this.selectedStartTime,
+          endTime: this.selectedEndTime,
+          languages: this.selectedLanguages,
+          gamerType: this.selectedGamerType,
+        };
+
+        addDoc(collection(db, "EditUserProfileCollection"), data)
+          .then(() => {
+            console.log("Form data sent to Firebase.");
+            this.isFormSent = true;
+
+            setTimeout(() => {
+              this.isFormSent = false;
+            }, 3000);
+          })
+          .catch((error) => {
+            console.error("Error sending form data to Firebase:", error);
+          });
+      } else {
+        this.isFormIncomplete = true;
+      }
     },
   },
 };
@@ -206,7 +219,7 @@ h1 {
 }
 
 .form-container {
-  width: 400px;
+  width: 500px; /* Adjust the width as desired */
   padding: 2rem;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -234,5 +247,56 @@ h1 {
 
 .submit-button:hover {
   background-color: #45a049;
+}
+
+.error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.success-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.success-message {
+  padding: 1.5rem;
+  background-color: #4caf50;
+  color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: slideFadeOut 3s ease-in forwards;
+}
+
+@keyframes slideFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+    display: none;
+  }
+}
+.error-message {
+  background-color: rgb(247, 103, 0);
+  color: black;
 }
 </style>

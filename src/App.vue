@@ -168,7 +168,7 @@
   background-color: rgb(247, 103, 0);
   display: flex;
   justify-content: center;
-  padding: 1px 0;
+  padding: 0.1px 0;
 }
 
 .navbar-container {
