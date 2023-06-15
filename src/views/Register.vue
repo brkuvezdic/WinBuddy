@@ -69,7 +69,17 @@
   text-align: center;
   margin-top: 50px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  animation: fadeSlideDown 1s ease-in-out;
+  animation: fadeSlideDown 1.3s ease-in-out;
+}
+@keyframes fadeSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
 <script>

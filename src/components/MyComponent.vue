@@ -16,6 +16,4 @@ export default {
 };
 </script>
 
-<style>
-/* Add your component-specific styles here */
-</style>
+<style></style>
