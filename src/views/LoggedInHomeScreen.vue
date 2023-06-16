@@ -3,13 +3,26 @@
     <h1>My profile</h1>
     <form @submit.prevent="submitForm" class="form-container">
       <div class="form-group">
+        <div class="form-group">
+          <label for="selectedAvailability">Enter your gamertag</label>
+          <div class="row">
+            <div class="col">
+              <input
+                type="text"
+                v-model="selectedGamertag"
+                class="form-control"
+                id="selectedGamertag"
+              />
+            </div>
+          </div>
+        </div>
         <label for="games">Select a game you want to find a buddy in:</label>
         <br />
         <div class="checkbox-group">
           <input
             type="checkbox"
             id="game1"
-            value="game1"
+            value="League of Legends"
             v-model="selectedGames"
           />
           <label for="game1"> League of Legends</label>
@@ -17,7 +30,7 @@
           <input
             type="checkbox"
             id="game2"
-            value="game2"
+            value="Tetris"
             v-model="selectedGames"
           />
           <label for="game2"> Tetris</label>
@@ -25,7 +38,7 @@
           <input
             type="checkbox"
             id="game3"
-            value="game3"
+            value="F1@2023 "
             v-model="selectedGames"
           />
           <label for="game3"> F1@2023</label>
@@ -38,16 +51,16 @@
         <div class="checkbox-group">
           <input
             type="checkbox"
-            id="program1"
-            value="program1"
+            id="program1ID"
+            value="Discord"
             v-model="selectedVoicePrograms"
           />
-          <label for="program1">Discord</label>
+          <label for="programmmmmLABEL">Discord</label>
           <br />
           <input
             type="checkbox"
-            id="program2"
-            value="program2"
+            id="program2ID"
+            value="Skype"
             v-model="selectedVoicePrograms"
           />
           <label for="program2">Skype</label>
@@ -55,7 +68,7 @@
           <input
             type="checkbox"
             id="program3"
-            value="program3"
+            value="Teamspeak"
             v-model="selectedVoicePrograms"
           />
           <label for="program3">Teamspeak</label>
@@ -90,7 +103,7 @@
           <input
             type="checkbox"
             id="language1"
-            value="language1"
+            value="English"
             v-model="selectedLanguages"
           />
           <label for="game1">English</label>
@@ -98,7 +111,7 @@
           <input
             type="checkbox"
             id="language2"
-            value="language2"
+            value="German"
             v-model="selectedLanguages"
           />
           <label for="game2"> German</label>
@@ -106,7 +119,7 @@
           <input
             type="checkbox"
             id="language3"
-            value="language3"
+            value="French"
             v-model="selectedLanguages"
           />
           <label for="game3"> French</label>
@@ -114,7 +127,7 @@
           <input
             type="checkbox"
             id="language4"
-            value="language4"
+            value="Spanish"
             v-model="selectedLanguages"
           />
           <label for="game3"> Spanish</label>
@@ -152,6 +165,7 @@ import { addDoc, collection, db } from "@/firebase";
 export default {
   data() {
     return {
+      selectedGamertag: "",
       selectedGames: [],
       selectedVoicePrograms: [],
       selectedStartTime: "",
@@ -165,6 +179,7 @@ export default {
   methods: {
     submitForm() {
       if (
+        this.selectedGamertag !== "" &&
         this.selectedGames.length > 0 &&
         this.selectedVoicePrograms.length > 0 &&
         this.selectedStartTime !== "" &&
@@ -175,6 +190,7 @@ export default {
         this.isFormIncomplete = false;
 
         const data = {
+          selectedGamertag: this.selectedGamertag,
           games: this.selectedGames,
           voicePrograms: this.selectedVoicePrograms,
           startTime: this.selectedStartTime,

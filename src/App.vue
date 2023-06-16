@@ -13,7 +13,14 @@
             <span class="navbar-brand-text">WinBuddy</span>
           </a>
         </div>
-
+        <v-btn
+          v-if="$route.path !== '/findplayers' && store.currentUser"
+          color="primary"
+          class="navbar-button"
+          @click="FindPlayers"
+        >
+          FIND PLAYERS
+        </v-btn>
         <div class="navbar-right">
           <div class="navbar-user">
             <p v-if="store.currentUser" class="user-email">
@@ -253,6 +260,9 @@ export default {
     },
     navigateToLoggedInHomeScreen() {
       this.$router.push({ path: "/loggedinhomescreen" });
+    },
+    FindPlayers() {
+      this.$router.replace({ path: "/findplayers" });
     },
   },
 
