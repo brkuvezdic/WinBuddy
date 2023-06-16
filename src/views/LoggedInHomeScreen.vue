@@ -160,7 +160,8 @@
 </template>
 
 <script>
-import { addDoc, collection, db } from "@/firebase";
+import { setDoc, doc, collection, db } from "@/firebase";
+import { auth } from "@/firebase"; // Add this import for auth
 
 export default {
   data() {
@@ -189,6 +190,9 @@ export default {
       ) {
         this.isFormIncomplete = false;
 
+        const userId = auth.currentUser?.uid;
+        const docRef = doc(db, "EditUserProfileCollection", userId);
+
         const data = {
           selectedGamertag: this.selectedGamertag,
           games: this.selectedGames,
@@ -199,9 +203,9 @@ export default {
           gamerType: this.selectedGamerType,
         };
 
-        addDoc(collection(db, "EditUserProfileCollection"), data)
+        setDoc(docRef, data)
           .then(() => {
-            console.log("Form data sent to Firebase.");
+            console.log("Form data updated in Firebase.");
             this.isFormSent = true;
 
             setTimeout(() => {
@@ -209,7 +213,7 @@ export default {
             }, 3000);
           })
           .catch((error) => {
-            console.error("Error sending form data to Firebase:", error);
+            console.error("Error updating form data in Firebase:", error);
           });
       } else {
         this.isFormIncomplete = true;

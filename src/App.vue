@@ -272,6 +272,11 @@ export default {
         console.log("Authenticated");
         console.log("Logged in user:", user.email);
         store.currentUser = user.email;
+
+        const userId = user.uid;
+
+        // Now you can use the userId as needed
+        console.log("User ID:", userId);
       } else {
         console.log("Not Authenticated");
         console.log("No user");
