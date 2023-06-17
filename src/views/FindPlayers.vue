@@ -36,7 +36,7 @@
           type="text"
           id="startTimeFilter"
           v-model="startTime"
-          placeholder="Enter start time"
+          placeholder="Eg. 17:44"
         />
       </div>
 
@@ -46,7 +46,7 @@
           type="text"
           id="endTimeFilter"
           v-model="endTime"
-          placeholder="Enter end time"
+          placeholder="Eg. 10:43"
         />
       </div>
 
@@ -85,12 +85,10 @@
       <ul class="player-list">
         <li v-for="player in filteredPlayers" :key="player.id">
           <div class="player-card">
+            <h3>{{ player.selectedGamertag }}</h3>
+
             <div class="player-info">
               <div>
-                <div>
-                  <span class="info-label">Gamertag:</span>
-                  {{ player.selectedGamertag }}
-                </div>
                 <span class="info-label">Games:</span>
                 {{ formatArray(player.games) }}
               </div>
@@ -122,7 +120,22 @@
 </template>
 
 <script>
-import { collection, db, getDocs } from "@/firebase";
+import {
+  auth,
+  onAuthStateChanged,
+  collection,
+  getDocs,
+  query,
+  where,
+  db,
+  addDoc,
+} from "@/firebase.js";
+import {
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
 
 export default {
   name: "FindPlayers",
@@ -131,7 +144,7 @@ export default {
       playerInfo: [], // Array to store all player information
       filteredPlayers: [], // Array to store filtered player information
       selectedGames: [], // Selected games filter
-      selectedVoicePrograms: [], // Selected voice program filter
+      selectedVoicePrograms: [], // Selected v  oice program filter
       startTime: "", // Start time filter
       endTime: "", // End time filter
       selectedLanguages: [], // Selected languages filter
@@ -196,6 +209,16 @@ export default {
       });
       this.filteredPlayers = this.playerInfo;
     },
+
+    async getPlayerProfilePicture(profilePictures) {
+      if (profilePictures && profilePictures.length > 0) {
+        const storagePath = `profilePictures/${profilePictures[0]}`;
+        const url = await getDownloadURL(ref(storage, storagePath));
+        return url;
+      }
+      return null;
+    },
+
     formatArray(arr) {
       return arr.length > 0 ? arr.join(", ") : "N/A";
     },
@@ -297,7 +320,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+.profile-picture {
+  display: block;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-top: 10px;
+}
+
 .find-players {
   max-width: 800px;
   margin: 0 auto;
@@ -333,10 +365,12 @@ export default {
   margin-right: 5px;
   margin-bottom: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .selectable-options span.selected {
-  background-color: #ccc;
+  background-color: #4caf50;
+  color: #fff;
 }
 
 .player-container {
@@ -355,6 +389,11 @@ export default {
   border-radius: 4px;
   padding: 10px;
   margin-bottom: 10px;
+  transition: box-shadow 0.3s ease;
+}
+
+.player-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .info-label {
@@ -369,14 +408,6 @@ export default {
   margin-top: 5px;
 }
 
-button {
-  margin-top: 10px;
-}
-
-button + button {
-  margin-left: 10px;
-}
-
 .action-button {
   background-color: #4caf50;
   border: none;
@@ -386,22 +417,71 @@ button + button {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  border-radius: 4px;
   cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
 .action-button:hover {
   background-color: #45a049;
 }
 
-.input-text {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+.action-button:active {
+  background-color: #3e8e41;
 }
 
-.error {
-  color: red;
-  font-size: 12px;
+.action-button:focus {
+  outline: none;
+}
+
+.input-text {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.input-text:focus {
+  border-color: #4caf50;
+}
+
+.success-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.success-message {
+  padding: 1.5rem;
+  background-color: #4caf50;
+  color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: slideFadeOut 3s ease-in forwards;
+}
+
+@keyframes slideFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
 }
 </style>

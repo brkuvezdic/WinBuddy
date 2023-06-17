@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background-color: dimgray" class="dark-bg">
+  <v-app class="dark-bg">
     <nav class="navbar navbar-custom">
       <div class="navbar-container">
         <div class="navbar-left">

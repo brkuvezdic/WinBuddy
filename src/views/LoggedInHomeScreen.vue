@@ -3,19 +3,31 @@
     <h1>My profile</h1>
     <form @submit.prevent="submitForm" class="form-container">
       <div class="form-group">
-        <div class="form-group">
-          <label for="selectedAvailability">Enter your gamertag</label>
-          <div class="row">
-            <div class="col">
-              <input
-                type="text"
-                v-model="selectedGamertag"
-                class="form-control"
-                id="selectedGamertag"
-              />
-            </div>
+        <label for="selectedGamertag">Enter your gamertag</label>
+        <div class="row">
+          <div class="col">
+            <input
+              type="text"
+              v-model="selectedGamertag"
+              class="form-control"
+              id="selectedGamertag"
+            />
           </div>
         </div>
+      </div>
+
+      <div class="form-group">
+        <label for="profilePicture">Upload Profile Picture</label>
+        <input
+          type="file"
+          accept="image/*"
+          @change="handleProfilePictureUpload"
+          class="form-control"
+          id="profilePicture"
+        />
+      </div>
+
+      <div class="form-group">
         <label for="games">Select a game you want to find a buddy in:</label>
         <br />
         <div class="checkbox-group">
@@ -25,7 +37,7 @@
             value="League of Legends"
             v-model="selectedGames"
           />
-          <label for="game1"> League of Legends</label>
+          <label for="game1">League of Legends</label>
           <br />
           <input
             type="checkbox"
@@ -33,18 +45,18 @@
             value="Tetris"
             v-model="selectedGames"
           />
-          <label for="game2"> Tetris</label>
+          <label for="game2">Tetris</label>
           <br />
           <input
             type="checkbox"
             id="game3"
-            value="F1@2023 "
+            value="F1@2023"
             v-model="selectedGames"
           />
-          <label for="game3"> F1@2023</label>
+          <label for="game3">F1@2023</label>
         </div>
       </div>
-      <br />
+
       <div class="form-group">
         <label for="voicePrograms">Select voice communication programs:</label>
         <br />
@@ -55,7 +67,7 @@
             value="Discord"
             v-model="selectedVoicePrograms"
           />
-          <label for="programmmmmLABEL">Discord</label>
+          <label for="program1ID">Discord</label>
           <br />
           <input
             type="checkbox"
@@ -63,7 +75,7 @@
             value="Skype"
             v-model="selectedVoicePrograms"
           />
-          <label for="program2">Skype</label>
+          <label for="program2ID">Skype</label>
           <br />
           <input
             type="checkbox"
@@ -74,7 +86,7 @@
           <label for="program3">Teamspeak</label>
         </div>
       </div>
-      <br />
+
       <div class="form-group">
         <label for="selectedAvailability">Select Availability</label>
         <div class="row">
@@ -96,8 +108,9 @@
           </div>
         </div>
       </div>
+
       <div class="form-group">
-        <label for="games">Select languages that you can speak</label>
+        <label for="languages">Select languages that you can speak</label>
         <br />
         <div class="checkbox-group">
           <input
@@ -106,7 +119,7 @@
             value="English"
             v-model="selectedLanguages"
           />
-          <label for="game1">English</label>
+          <label for="language1">English</label>
           <br />
           <input
             type="checkbox"
@@ -114,7 +127,7 @@
             value="German"
             v-model="selectedLanguages"
           />
-          <label for="game2"> German</label>
+          <label for="language2">German</label>
           <br />
           <input
             type="checkbox"
@@ -122,7 +135,7 @@
             value="French"
             v-model="selectedLanguages"
           />
-          <label for="game3"> French</label>
+          <label for="language3">French</label>
           <br />
           <input
             type="checkbox"
@@ -130,12 +143,12 @@
             value="Spanish"
             v-model="selectedLanguages"
           />
-          <label for="game3"> Spanish</label>
+          <label for="language4">Spanish</label>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="selectedGamerType">Select what type of gamer are you</label>
+        <label for="selectedGamerType">Select what type of gamer you are</label>
         <select
           v-model="selectedGamerType"
           class="form-control"
@@ -148,7 +161,11 @@
       </div>
 
       <button type="submit" class="submit-button">Submit</button>
-
+      <img
+        v-if="profilePicturesUrl"
+        :src="profilePicturesUrl"
+        alt="Profile Picture"
+      />
       <div v-if="isFormIncomplete" class="error-message">
         Please fill in all the required fields.
       </div>
@@ -160,13 +177,15 @@
 </template>
 
 <script>
-import { setDoc, doc, collection, db } from "@/firebase";
-import { auth } from "@/firebase"; // Add this import for auth
+import { setDoc, doc, db, updateDoc } from "@/firebase";
+import { auth } from "@/firebase";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default {
   data() {
     return {
       selectedGamertag: "",
+      profilePictures: null,
       selectedGames: [],
       selectedVoicePrograms: [],
       selectedStartTime: "",
@@ -175,12 +194,18 @@ export default {
       selectedGamerType: "",
       isFormIncomplete: false,
       isFormSent: false,
+      profilePicturesUrl: null,
     };
   },
+
   methods: {
+    handleProfilePictureUpload(event) {
+      this.profilePictures = event.target.files[0];
+    },
     submitForm() {
       if (
         this.selectedGamertag !== "" &&
+        this.profilePictures !== null &&
         this.selectedGames.length > 0 &&
         this.selectedVoicePrograms.length > 0 &&
         this.selectedStartTime !== "" &&
@@ -190,7 +215,26 @@ export default {
       ) {
         this.isFormIncomplete = false;
 
-        const userId = auth.currentUser?.uid;
+        const user = auth.currentUser;
+        const userId = user?.uid;
+        const fileName = `${userId}-${user?.displayName}.jpg`;
+
+        // Upload profile picture
+        const storageRef = ref(getStorage(), `profilePictures/${fileName}`);
+        const uploadTask = uploadBytes(storageRef, this.profilePictures);
+
+        uploadTask
+          .then((snapshot) => {
+            console.log("Profile picture uploaded to storage.");
+            getDownloadURL(snapshot.ref).then((downloadURL) => {
+              this.updateProfilePicture(userId, downloadURL);
+            });
+          })
+          .catch((error) => {
+            console.error("Error uploading profile picture:", error);
+          });
+
+        // Save form data
         const docRef = doc(db, "EditUserProfileCollection", userId);
 
         const data = {
@@ -205,118 +249,85 @@ export default {
 
         setDoc(docRef, data)
           .then(() => {
-            console.log("Form data updated in Firebase.");
+            console.log("Form data saved to Firestore.");
             this.isFormSent = true;
-
-            setTimeout(() => {
-              this.isFormSent = false;
-            }, 3000);
           })
           .catch((error) => {
-            console.error("Error updating form data in Firebase:", error);
+            console.error("Error saving form data:", error);
           });
       } else {
         this.isFormIncomplete = true;
       }
     },
+    updateProfilePicture(userId, downloadURL) {
+      const userRef = doc(db, "EditUserProfileCollection", userId);
+      updateDoc(userRef, { profilePictures: downloadURL })
+        .then(() => {
+          console.log("Profile picture URL saved to Firestore.");
+          this.profilePicturesUrl = downloadURL; // Update the profile picture URL
+        })
+        .catch((error) => {
+          console.error("Error saving profile picture URL:", error);
+        });
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .centered-form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  font-family: Arial, sans-serif;
-}
-
-h1 {
-  color: #333;
-  margin-bottom: 2rem;
 }
 
 .form-container {
-  width: 500px; /* Adjust the width as desired */
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
 }
 
-.checkbox-group {
-  margin-left: 20px;
+.form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 5px;
 }
 
 .submit-button {
-  padding: 0.5rem 1rem;
-  background-color: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.submit-button:hover {
-  background-color: #45a049;
-}
-
-.error {
-  color: red;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-}
-
-.success-popup {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+  padding: 10px;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.error-message,
+.success-message {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.error-message {
+  color: red;
 }
 
 .success-message {
-  padding: 1.5rem;
-  background-color: #4caf50;
-  color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  animation: slideFadeOut 3s ease-in forwards;
-}
-
-@keyframes slideFadeOut {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  10% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  90% {
-    opacity: 1;
-    transform: translateY(-100%);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-100%);
-    display: none;
-  }
-}
-.error-message {
-  background-color: rgb(247, 103, 0);
-  color: black;
+  color: green;
 }
 </style>
