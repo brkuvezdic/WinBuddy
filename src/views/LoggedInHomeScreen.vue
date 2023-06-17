@@ -142,8 +142,8 @@
           id="selectedGamerType"
         >
           <option value="">Please select</option>
-          <option value="competitive">Competitive</option>
-          <option value="relaxed">Relaxed</option>
+          <option value="Competitive">Competitive</option>
+          <option value="Relaxed">Relaxed</option>
         </select>
       </div>
 
