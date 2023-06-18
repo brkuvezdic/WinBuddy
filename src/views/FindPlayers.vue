@@ -1,6 +1,6 @@
 <template>
   <div class="find-players">
-    <h1 class="PlayersTitle">Players</h1>
+    <h1 class="PlayersTitle">Filter players</h1>
     <div class="filters">
       <div>
         <label for="gameFilter">Game:</label>
@@ -78,8 +78,10 @@
         </div>
       </div>
     </div>
-    <button class="action-button" @click="applyFilters">Apply Filters</button>
-    <button class="action-button" @click="resetFilters">Reset Filters</button>
+    <div class="centered">
+      <button class="action-button" @click="applyFilters">Apply Filters</button>
+      <button class="action-button" @click="resetFilters">Reset Filters</button>
+    </div>
 
     <div class="player-container">
       <ul class="player-list">
@@ -339,11 +341,17 @@ export default {
 .PlayersTitle {
   text-align: center;
   margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  text-transform: uppercase;
 }
 
 .filters {
+  background-color: rgb(247, 103, 0);
   display: flex;
   flex-wrap: wrap;
+  justify-content: center; /* Center the filters */
+  align-items: center; /* Center the filters */
   margin-bottom: 20px;
 }
 
@@ -355,6 +363,8 @@ export default {
 .selectable-options {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center; /* Center the selection for filters */
+  align-items: center; /* Center the selection for filters */
 }
 
 .selectable-options span {
@@ -376,24 +386,53 @@ export default {
 .player-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .player-list {
   list-style: none;
-  padding: 0;
+  padding: 30px;
   margin: 0;
+}
+.gameFilter {
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  padding: 100px;
+  margin-bottom: 10px;
 }
 
 .player-card {
-  border: 1px solid #ccc;
+  border: 1px solid #d63a13;
   border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 45px;
+  margin-bottom: 30px;
   transition: box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  transition: transform 0.3s ease;
 }
 
+.player-card:before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 .player-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: red;
+  transform: translateY(-20px);
+}
+
+.player-card:hover:before {
+  padding: 50px;
+  opacity: 1;
+  top: 0;
 }
 
 .info-label {
@@ -476,12 +515,34 @@ export default {
     transform: translateY(0);
   }
   90% {
-    opacity: 1;
-    transform: translateY(-100%);
+    opacity: 0;
+    transform: translateY(-20px);
   }
   100% {
     opacity: 0;
-    transform: translateY(-100%);
+    transform: translateY(-20px);
+    display: none;
   }
+}
+
+.error-message {
+  padding: 1.5rem;
+  background-color: #f44336;
+  color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: slideFadeOut 3s ease-in forwards;
+}
+
+.success-message,
+.error-message {
+  position: relative;
+  z-index: 9999;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
