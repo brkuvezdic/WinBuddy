@@ -1,5 +1,5 @@
 <template>
-  <v-app class="dark-bg">
+  <v-app>
     <nav class="navbar navbar-custom">
       <div class="navbar-container">
         <div class="navbar-left">
@@ -28,6 +28,14 @@
             </p>
           </div>
           <div class="navbar-buttons">
+            <v-btn
+              v-if="$route.path !== '/news' && store.currentUser"
+              color="primary"
+              class="navbar-button"
+              @click="news"
+            >
+              NEWS
+            </v-btn>
             <router-link
               v-if="store.currentUser && $route.path !== '/loggedinhomescreen'"
               to="/loggedinhomescreen"
@@ -82,6 +90,10 @@
 </template>
 
 <style>
+.dark-bg {
+  height: 100%;
+  background-color: rgb(200, 45, 45);
+}
 .move-left {
   margin-left: -3%;
 }
@@ -263,6 +275,9 @@ export default {
     },
     FindPlayers() {
       this.$router.replace({ path: "/findplayers" });
+    },
+    news() {
+      this.$router.replace({ path: "/news" });
     },
   },
 
