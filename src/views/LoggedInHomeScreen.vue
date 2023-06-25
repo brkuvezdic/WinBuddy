@@ -18,17 +18,6 @@
       </div>
 
       <div class="form-group">
-        <label for="profilePicture">Upload Profile Picture</label>
-        <input
-          type="file"
-          accept="image/*"
-          @change="handleProfilePictureUpload"
-          class="form-control"
-          id="profilePicture"
-        />
-      </div>
-
-      <div class="form-group">
         <label for="games">Select a game you want to find a buddy in:</label>
         <br />
         <div class="checkbox-group">
@@ -182,7 +171,7 @@ export default {
   data() {
     return {
       selectedGamertag: "",
-      profilePictures: null,
+
       selectedGames: [],
       selectedVoicePrograms: [],
       selectedStartTime: "",
@@ -191,18 +180,13 @@ export default {
       selectedGamerType: "",
       isFormIncomplete: false,
       isFormSent: false,
-      profilePicturesUrl: null,
     };
   },
 
   methods: {
-    handleProfilePictureUpload(event) {
-      this.profilePictures = event.target.files[0];
-    },
     submitForm() {
       if (
         this.selectedGamertag !== "" &&
-        this.profilePictures !== null &&
         this.selectedGames.length > 0 &&
         this.selectedVoicePrograms.length > 0 &&
         this.selectedStartTime !== "" &&

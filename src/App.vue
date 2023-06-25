@@ -157,12 +157,13 @@
   text-align: center;
   font-size: 24px;
   font-weight: bold;
-  color: #ffffff;
+  color: #000000;
   margin-top: 20px;
 }
 
 .title {
   text-align: center;
+
   font-size: 48px;
   font-weight: bold;
   color: #ffffff;
@@ -176,8 +177,8 @@
     text-shadow: none;
   }
   50% {
-    color: #ffcc00;
-    text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00, 0 0 30px #ffcc00;
+    color: rgb(247, 103, 0);
+    text-shadow: 0 0 10px rgb(247, 103, 0), 0 0 20px #ffcc00, 0 0 30px #ffcc00;
   }
   100% {
     color: #ffffff;

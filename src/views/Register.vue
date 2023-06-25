@@ -49,7 +49,21 @@
             <button type="button" @click="register" class="btn btn-primary">
               Submit
             </button>
+            <v-dialog v-model="showErrorMessage" persistent max-width="400">
+              <v-card>
+                <v-card-title class="headline">Error</v-card-title>
+                <v-card-text>
+                  <p>{{ errorMessage }}</p>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn color="primary" @click="showErrorMessage = false"
+                    >OK</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </form>
+
           <div v-else>
             <p>Registration successful!</p>
             <router-link to="/home">
@@ -94,10 +108,31 @@ export default {
       passwordRepeat: "",
       submitted: false,
       errorMessage: "",
+
+      showErrorMessage: false,
     };
   },
   methods: {
+    validateEmail(email) {
+      // Regular expression for email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      return emailRegex.test(email);
+    },
     register() {
+      if (!this.validateEmail(this.email)) {
+        this.errorMessage = "Invalid email format. E.g. MyeMail@gmail.com";
+        this.showErrorMessage = true;
+        return;
+      }
+
+      if (this.password !== this.passwordRepeat) {
+        console.error("Passwords do not match");
+        this.errorMessage = "Passwords do not match";
+        this.showErrorMessage = true;
+        return;
+      }
+
       if (this.password !== this.passwordRepeat) {
         console.error("Passwords do not match");
         this.errorMessage = "Passwords do not match";
@@ -109,7 +144,7 @@ export default {
         .then(() => {
           console.log("Uspjesna registracija");
           this.submitted = true;
-          this.$router.replace({ name: "home" });
+          this.$router.push({ path: "/loggedinhomescreen" });
         })
         .catch((error) => {
           console.error("Doslo je do greske", error);

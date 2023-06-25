@@ -18,9 +18,6 @@
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
               />
-              <small id="emailHelp" class="form-text text-muted"
-                >We'll never share your email with anyone else.</small
-              >
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
@@ -37,9 +34,21 @@
             </button>
           </form>
         </div>
+
         <div class="col-sm"></div>
       </div>
     </div>
+    <v-dialog v-model="showErrorMessage" persistent max-width="400">
+      <v-card>
+        <v-card-title class="headline">Error</v-card-title>
+        <v-card-text>
+          <p>{{ errorMessage }}</p>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" @click="showErrorMessage = false">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -51,23 +60,49 @@ export default {
     return {
       email: "",
       password: "",
+      showErrorMessage: false,
+      errorMessage: "",
     };
   },
   methods: {
+    validateEmail(email) {
+      // Regular expression for email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    },
     login() {
+      if (!this.validateEmail(this.email)) {
+        console.error("Invalid email format");
+        this.errorMessage = "Invalid email format";
+        this.showErrorMessage = true;
+        return;
+      }
+
       const email = this.email;
       const password = this.password;
+
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log("Uspjesna prijava", userCredential);
+          console.log("Successful login", userCredential);
 
-          this.$router.push({ name: "loggedinhomescreen" });
+          this.$router.replace({ path: "/findplayers" });
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log("Greskaaa", error, errorCode, errorMessage);
+          console.log("Error", error, errorCode, errorMessage);
+          if (
+            errorCode === "auth/wrong-password" ||
+            errorCode === "auth/user-not-found"
+          ) {
+            this.errorMessage =
+              "Email and/or password do not match our database";
+            this.showErrorMessage = true;
+          } else {
+            this.errorMessage = errorMessage;
+            this.showErrorMessage = true;
+          }
         });
     },
   },
