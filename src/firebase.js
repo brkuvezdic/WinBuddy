@@ -1,15 +1,44 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage";
+import firebase from "firebase/compat/app";
+import {
+  doc,
+  addDoc,
+  getDoc,
+  setDoc,
+  getDocs,
+  query,
+  where,
+  getFirestore,
+  collection,
+  updateDoc,
+} from "firebase/firestore/lite";
+import {
+  getAuth,
+  updatePassword,
+  signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  confirmPasswordReset,
+  beforeAuthStateChanged,
+  onAuthStateChanged,
+  deleteUser,
+} from "firebase/auth";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  listAll,
+} from "firebase/storage";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
   apiKey: "AIzaSyDnh0sQLlHYO3vf_7t36kqm9XCd6bjnI5o",
   authDomain: "winbuddy-81c4b.firebaseapp.com",
@@ -22,6 +51,34 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+const db = getFirestore(app);
 
-export default { firebase };
+export {
+  app,
+  auth,
+  storage,
+  getAuth,
+  db,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  addDoc,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  onAuthStateChanged,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  signOut,
+  updatePassword,
+  getDocs,
+  query,
+  where,
+  updateDoc,
+  listAll,
+  deleteUser,
+};
