@@ -29,18 +29,20 @@
           </div>
           <div class="navbar-buttons">
             <v-btn
+              style="margin-right: 5px"
               v-if="$route.path !== '/news' && store.currentUser"
               color="primary"
               class="navbar-button"
               @click="news"
             >
-              NEWS
+              Best Team 2023
             </v-btn>
             <router-link
               v-if="store.currentUser && $route.path !== '/loggedinhomescreen'"
               to="/loggedinhomescreen"
             >
               <v-btn
+                style="margin-right: 5px"
                 color="primary"
                 class="navbar-button"
                 @click="navigateToLoggedInHomeScreen"

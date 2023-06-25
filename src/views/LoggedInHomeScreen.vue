@@ -1,6 +1,7 @@
 <template>
   <div class="centered-form">
     <h1>My profile</h1>
+
     <form @submit.prevent="submitForm" class="form-container">
       <div class="form-group">
         <label for="selectedGamertag">Enter your gamertag</label>
@@ -161,11 +162,7 @@
       </div>
 
       <button type="submit" class="submit-button">Submit</button>
-      <img
-        v-if="profilePicturesUrl"
-        :src="profilePicturesUrl"
-        alt="Profile Picture"
-      />
+
       <div v-if="isFormIncomplete" class="error-message">
         Please fill in all the required fields.
       </div>
@@ -259,6 +256,19 @@ export default {
         this.isFormIncomplete = true;
       }
     },
+    getProfilePictureUrl(userId) {
+      const fileName = `${userId}-${user?.displayName}.jpg`;
+      const storageRef = ref(storage, `profilePictures/${fileName}`);
+
+      getDownloadURL(storageRef)
+        .then((downloadURL) => {
+          this.profilePicturesUrl = downloadURL;
+        })
+        .catch((error) => {
+          console.error("Error fetching profile picture URL:", error);
+        });
+    },
+
     updateProfilePicture(userId, downloadURL) {
       const userRef = doc(db, "EditUserProfileCollection", userId);
       updateDoc(userRef, { profilePictures: downloadURL })
@@ -270,6 +280,14 @@ export default {
           console.error("Error saving profile picture URL:", error);
         });
     },
+  },
+  mounted() {
+    const user = auth.currentUser;
+    const userId = user?.uid;
+
+    if (userId) {
+      this.getProfilePictureUrl(userId);
+    }
   },
 };
 </script>
