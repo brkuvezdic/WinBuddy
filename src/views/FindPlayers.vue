@@ -86,8 +86,7 @@
     <div class="player-container">
       <ul class="player-list">
         <li v-for="player in filteredPlayers" :key="player.id">
-          <div class="player-card" @click="showPopup(player)"></div>
-          <div class="player-card">
+          <div class="player-card" @click="showPopup(player)">
             <h3>{{ player.selectedGamertag }}</h3>
 
             <div class="player-info">
@@ -107,8 +106,8 @@
                 <span class="info-label">End Time:</span> {{ player.endTime }}
               </div>
               <div>
-                <span class="info-label">Languages:</span>
-                {{ player.languages }}
+                <span class="info-label">Language:</span>
+                {{ player.language }}
               </div>
               <div>
                 <span class="info-label">Gamer Type:</span>
@@ -118,51 +117,48 @@
           </div>
         </li>
       </ul>
+    </div>
 
-      <!-- Popup pp-->
-      <div v-if="showPopupFlag" class="popup">
-        <div class="popup-content">
-          <h2>{{ selectedPlayer.selectedGamertag }}</h2>
-          <p>Additional information: {{ selectedPlayer.additionalInfo }}</p>
+    <!-- Popup -->
+    <div v-if="showPopupFlag" class="popup">
+      <div class="popup-content">
+        <h2>{{ selectedPlayer.selectedGamertag }}</h2>
+        <p>Additional information: {{ selectedPlayer.additionalInfo }}</p>
 
-          <form @submit.prevent="searchPlayer">
-            <input
-              v-model="summonerName"
-              type="text"
-              placeholder="Enter Summoner Name"
-            />
-            <button type="submit">Enter</button>
-          </form>
-          <h1 v-if="selectedPlayer.summonerLevel">
-            Summoner Level: {{ selectedPlayer.summonerLevel }}
-          </h1>
-
-          <h1
-            v-if="
-              !selectedPlayer.summonerLevel && !selectedPlayer.profileIconUrl
-            "
-          >
-            No user found.
-          </h1>
-
-          <h1 v-if="selectedPlayer.profileIconUrl">Profile icon:</h1>
-
-          <img
-            v-if="selectedPlayer.profileIconUrl"
-            :src="selectedPlayer.profileIconUrl"
-            alt="Profile Icon"
+        <form @submit.prevent="searchPlayer">
+          <input
+            v-model="summonerName"
+            type="text"
+            placeholder="Enter Summoner Name"
           />
+          <button type="submit">Enter</button>
+        </form>
 
-          <button @click="closePopup">Close</button>
-        </div>
+        <h1 v-if="selectedPlayer.summonerLevel">
+          Summoner Level: {{ selectedPlayer.summonerLevel }}
+        </h1>
+
+        <h1
+          v-if="!selectedPlayer.summonerLevel && !selectedPlayer.profileIconUrl"
+        >
+          No user found.
+        </h1>
+
+        <h1 v-if="selectedPlayer.profileIconUrl">Profile icon:</h1>
+
+        <img
+          v-if="selectedPlayer.profileIconUrl"
+          :src="selectedPlayer.profileIconUrl"
+          alt="Profile Icon"
+        />
+
+        <button @click="closePopup">Close</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-const API_KEY = "RGAPI-af6cf03e-4e08-431a-a8f6-02e75cc2a428";
 import {
   auth,
   onAuthStateChanged,
@@ -179,6 +175,8 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
+import axios from "axios";
+const API_KEY = "RGAPI-af6cf03e-4e08-431a-a8f6-02e75cc2a428";
 
 export default {
   name: "FindPlayers",
@@ -274,14 +272,6 @@ export default {
     formatArray(arr) {
       return arr.length > 0 ? arr.join(", ") : "N/A";
     },
-    showPopup(player) {
-      this.selectedPlayer = player;
-      this.showPopupFlag = true;
-    },
-    closePopup() {
-      this.selectedPlayer = null;
-      this.showPopupFlag = false;
-    },
 
     toggleGame(game) {
       if (this.selectedGames.includes(game)) {
@@ -308,6 +298,15 @@ export default {
         this.selectedLanguages.push(language);
       }
     },
+    showPopup(player) {
+      this.selectedPlayer = player;
+      this.showPopupFlag = true;
+    },
+
+    closePopup() {
+      this.selectedPlayer = null;
+      this.showPopupFlag = false;
+    },
     toggleGamerType(gamerType) {
       if (this.selectedGamerType.includes(gamerType)) {
         this.selectedGamerType = this.selectedGamerType.filter(
@@ -317,11 +316,10 @@ export default {
         this.selectedGamerType.push(gamerType);
       }
     },
-
     async searchPlayer() {
       const summonerName = this.summonerName;
       var podaci = {};
-      console.log("POCETAK API FUNKCIJE");
+
       try {
         this.selectedPlayer.summonerLevel = null;
         const response = await axios.get(
@@ -329,18 +327,17 @@ export default {
             summonerName
           )}?api_key=${API_KEY}`
         );
-        // Handle the response data here
         podaci = response.data;
         this.selectedPlayer.summonerLevel = podaci.summonerLevel;
         this.selectedPlayer.profileIconUrl = this.getProfileIconUrl(
           podaci.profileIconId
         ); // Add this line
+
         this.$forceUpdate();
-        console.log("SUCCESS", podaci);
       } catch (error) {
         console.log("OVO JE ERROR RESPONSE", error);
-        // Handle the error here
       }
+
       console.log("Ovo je user", summonerName);
     },
 
@@ -472,9 +469,11 @@ export default {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
 .article:hover .article-overlay {
   opacity: 1;
 }
+
 .article .article-title {
   color: #fff;
   font-size: 20px;
@@ -482,9 +481,11 @@ export default {
   text-align: center;
   padding: 10px;
 }
+
 .additional-info {
   margin-top: 10px;
 }
+
 .popup {
   position: fixed;
   top: 0;
@@ -508,9 +509,11 @@ export default {
   overflow: auto;
   text-align: center;
 }
+
 .expanded-image {
   margin-bottom: 20px;
 }
+
 .expanded-image img {
   max-width: 100%;
   height: auto;
@@ -519,12 +522,15 @@ export default {
   font-size: 20px;
   font-weight: bold;
 }
+
 .article-description {
   margin-top: 5px;
 }
+
 .additional-info {
   margin-top: 10px;
 }
+
 .close-button {
   margin-top: 10px;
   padding: 8px 16px;
@@ -534,9 +540,11 @@ export default {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
 .close-button:hover {
   background-color: #e0e0e0;
 }
+
 @keyframes expand {
   0% {
     transform: translate(-50%, -50%) scale(0);
@@ -545,9 +553,11 @@ export default {
     transform: translate(-50%, -50%) scale(1);
   }
 }
+
 .article {
   position: relative;
 }
+
 .article-image {
   position: relative;
   overflow: hidden;
