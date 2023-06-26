@@ -134,6 +134,24 @@
           <button type="submit">Enter</button>
         </form>
 
+        <h1 v-if="selectedPlayer.summonerLevel">
+          Summoner Level: {{ selectedPlayer.summonerLevel }}
+        </h1>
+
+        <h1
+          v-if="!selectedPlayer.summonerLevel && !selectedPlayer.profileIconUrl"
+        >
+          No user found.
+        </h1>
+
+        <h1 v-if="selectedPlayer.profileIconUrl">Profile icon:</h1>
+
+        <img
+          v-if="selectedPlayer.profileIconUrl"
+          :src="selectedPlayer.profileIconUrl"
+          alt="Profile Icon"
+        />
+
         <button @click="closePopup">Close</button>
       </div>
     </div>
@@ -164,17 +182,23 @@ export default {
   name: "FindPlayers",
   data() {
     return {
-      playerInfo: [], // Array to store all player information
-      filteredPlayers: [], // Array to store filtered player information
-      selectedGames: [], // Selected games filter
-      selectedVoicePrograms: [], // Selected v  oice program filter
-      startTime: "", // Start time filter
-      endTime: "", // End time filter
-      selectedLanguages: [], // Selected languages filter
-      selectedGamerType: [], // Selected gamer type filter
-      showPopupFlag: false, // Flag to control the display of the popup
-      selectedPlayer: null, // Currently selected player to display in the popup
+      playerInfo: [],
+      filteredPlayers: [],
+      selectedGames: [],
+      selectedVoicePrograms: [],
+      startTime: "",
+      endTime: "",
+      selectedLanguages: [],
+      selectedGamerType: [],
+      showPopupFlag: false,
+      selectedPlayer: null,
       summonerName: "",
+      selectedPlayer: {
+        selectedGamertag: "",
+        additionalInfo: "",
+        summonerLevel: null,
+        profileIconUrl: "",
+      },
     };
   },
   mounted() {
@@ -296,25 +320,32 @@ export default {
     async searchPlayer() {
       const summonerName = this.summonerName;
       var podaci = {};
-      console.log("POCETAK API FUNKCIJE");
+
       try {
+        this.selectedPlayer.summonerLevel = null;
         const response = await axios.get(
           `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(
             summonerName
           )}?api_key=${API_KEY}`
         );
 
-        // Handle the response data here
         podaci = response.data;
-        console.log("SUCCESS", podaci);
+        this.selectedPlayer.summonerLevel = podaci.summonerLevel;
+        this.selectedPlayer.profileIconUrl = this.getProfileIconUrl(
+          podaci.profileIconId
+        ); // Add this line
+
+        this.$forceUpdate();
       } catch (error) {
         console.log("OVO JE ERROR RESPONSE", error);
-        // Handle the error here
       }
 
       console.log("Ovo je user", summonerName);
     },
 
+    getProfileIconUrl(profileIconId) {
+      return `http://ddragon.leagueoflegends.com/cdn/13.12.1/img/profileicon/${profileIconId}.png`; // Replace with the actual URL format for profile icons
+    },
     applyFilters() {
       let filteredPlayers = this.playerInfo;
 
