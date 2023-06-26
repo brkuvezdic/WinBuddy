@@ -272,7 +272,7 @@ export default {
         });
     },
     navigateToLoggedInHomeScreen() {
-      this.$router.push({ path: "/loggedinhomescreen" });
+      this.$router.replace({ path: "/loggedinhomescreen" });
     },
     FindPlayers() {
       this.$router.replace({ path: "/findplayers" });
