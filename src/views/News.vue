@@ -101,7 +101,7 @@ export default {
         },
         {
           id: 5,
-          title: "Zven",
+          title: "Zvenn",
           description: "Jesper Svenningsenn",
           additionalInfo: "KDA 1.9 | Most played champion: Thresh",
           image: "igrac5.png",
