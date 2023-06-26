@@ -86,7 +86,7 @@
     <div class="player-container">
       <ul class="player-list">
         <li v-for="player in filteredPlayers" :key="player.id">
-          <div class="player-card">
+          <div class="player-card" @click="showPopup(player)">
             <h3>{{ player.selectedGamertag }}</h3>
 
             <div class="player-info">
@@ -106,8 +106,8 @@
                 <span class="info-label">End Time:</span> {{ player.endTime }}
               </div>
               <div>
-                <span class="info-label">Languages:</span>
-                {{ formatArray(player.languages) }}
+                <span class="info-label">Language:</span>
+                {{ player.language }}
               </div>
               <div>
                 <span class="info-label">Gamer Type:</span>
@@ -117,6 +117,25 @@
           </div>
         </li>
       </ul>
+    </div>
+
+    <!-- Popup -->
+    <div v-if="showPopupFlag" class="popup">
+      <div class="popup-content">
+        <h2>{{ selectedPlayer.selectedGamertag }}</h2>
+        <p>Additional information: {{ selectedPlayer.additionalInfo }}</p>
+
+        <form @submit.prevent="searchPlayer">
+          <input
+            v-model="summonerName"
+            type="text"
+            placeholder="Enter Summoner Name"
+          />
+          <button type="submit">Enter</button>
+        </form>
+
+        <button @click="closePopup">Close</button>
+      </div>
     </div>
   </div>
 </template>
@@ -138,6 +157,8 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
+import axios from "axios";
+const API_KEY = "RGAPI-af6cf03e-4e08-431a-a8f6-02e75cc2a428";
 
 export default {
   name: "FindPlayers",
@@ -151,6 +172,9 @@ export default {
       endTime: "", // End time filter
       selectedLanguages: [], // Selected languages filter
       selectedGamerType: [], // Selected gamer type filter
+      showPopupFlag: false, // Flag to control the display of the popup
+      selectedPlayer: null, // Currently selected player to display in the popup
+      summonerName: "",
     };
   },
   mounted() {
@@ -183,6 +207,7 @@ export default {
       });
       return Array.from(languages);
     },
+
     gamerTypes() {
       // Extract unique gamer types from player information
       const gamerTypes = new Set();
@@ -224,6 +249,7 @@ export default {
     formatArray(arr) {
       return arr.length > 0 ? arr.join(", ") : "N/A";
     },
+
     toggleGame(game) {
       if (this.selectedGames.includes(game)) {
         this.selectedGames = this.selectedGames.filter((g) => g !== game);
@@ -249,6 +275,15 @@ export default {
         this.selectedLanguages.push(language);
       }
     },
+    showPopup(player) {
+      this.selectedPlayer = player;
+      this.showPopupFlag = true;
+    },
+
+    closePopup() {
+      this.selectedPlayer = null;
+      this.showPopupFlag = false;
+    },
     toggleGamerType(gamerType) {
       if (this.selectedGamerType.includes(gamerType)) {
         this.selectedGamerType = this.selectedGamerType.filter(
@@ -258,6 +293,28 @@ export default {
         this.selectedGamerType.push(gamerType);
       }
     },
+    async searchPlayer() {
+      const summonerName = this.summonerName;
+      var podaci = {};
+      console.log("POCETAK API FUNKCIJE");
+      try {
+        const response = await axios.get(
+          `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(
+            summonerName
+          )}?api_key=${API_KEY}`
+        );
+
+        // Handle the response data here
+        podaci = response.data;
+        console.log("SUCCESS", podaci);
+      } catch (error) {
+        console.log("OVO JE ERROR RESPONSE", error);
+        // Handle the error here
+      }
+
+      console.log("Ovo je user", summonerName);
+    },
+
     applyFilters() {
       let filteredPlayers = this.playerInfo;
 
@@ -323,6 +380,204 @@ export default {
 </script>
 
 <style>
+.section-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.section-heading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.articles {
+  max-height: 80%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.article {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.article.expanded {
+  transform: scale(0);
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.article-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.article-description {
+  margin-top: 5px;
+}
+.article-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.article-image img {
+  width: 100%;
+  height: auto;
+}
+
+.article-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.article:hover .article-overlay {
+  opacity: 1;
+}
+
+.article .article-title {
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+.additional-info {
+  margin-top: 10px;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.popup-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80%;
+  overflow: auto;
+  text-align: center;
+}
+
+.expanded-image {
+  margin-bottom: 20px;
+}
+
+.expanded-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.article-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.article-description {
+  margin-top: 5px;
+}
+
+.additional-info {
+  margin-top: 10px;
+}
+
+.close-button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: #e0e0e0;
+}
+
+@keyframes expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.article {
+  position: relative;
+}
+
+.article-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.article-image img {
+  width: 100%;
+  height: auto;
+}
+
+.article .article-title,
+.expanded-article .article-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.expanded-article .expanded-image {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.expanded-article .expanded-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.expanded-article .article-title {
+  position: static;
+  transform: none;
+}
 .profile-picture {
   display: block;
   width: 100px;

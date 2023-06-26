@@ -3,15 +3,13 @@
     <nav class="navbar navbar-custom">
       <div class="navbar-container">
         <div class="navbar-left">
-          <a class="navbar-brand" href="/">
-            <img
-              src="@/assets/game-console.png"
-              width="60"
-              class="d-inline-block align-top"
-              alt=""
-            />
-            <span class="navbar-brand-text">WinBuddy</span>
-          </a>
+          <img
+            src="@/assets/game-console.png"
+            width="60"
+            class="d-inline-block align-top"
+            alt=""
+          />
+          <span class="navbar-brand-text">WinBuddy</span>
         </div>
         <v-btn
           v-if="$route.path !== '/findplayers' && store.currentUser"
