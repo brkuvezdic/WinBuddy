@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     validateEmail(email) {
-      // Regular expression for email validation
+      // Regular expression for email validationn
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(email);
     },

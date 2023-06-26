@@ -18,7 +18,9 @@
       </div>
 
       <div class="form-group">
-        <label for="games">Select a game you want to find a buddy in:</label>
+        <label for="games"
+          >Select a game that you want to find a buddy in:</label
+        >
         <br />
         <div class="checkbox-group">
           <input

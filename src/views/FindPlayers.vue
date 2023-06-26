@@ -119,7 +119,7 @@
         </li>
       </ul>
 
-      <!-- Popup -->
+      <!-- Popup pp-->
       <div v-if="showPopupFlag" class="popup">
         <div class="popup-content">
           <h2>{{ selectedPlayer.selectedGamertag }}</h2>

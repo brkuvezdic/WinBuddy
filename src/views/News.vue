@@ -77,7 +77,7 @@ export default {
         },
         {
           id: 2,
-          title: "Imenko",
+          title: "Imenkoo",
           description: "Robert Huang",
           additionalInfo: "KDA 5.2 | Most played champion: Sejuani",
           image: "igrac2.png",

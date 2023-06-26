@@ -8,7 +8,7 @@
         <div class="col-sm"></div>
         <div class="col-sm">
           <form v-if="!submitted">
-            <!-- Registration form content -->
+            <!-- Registration form contentttt -->
             <div class="form-group">
               <label for="exampleInputEmail1">Email address</label>
               <input
