@@ -102,44 +102,6 @@
       </div>
 
       <div class="form-group">
-        <label for="languages">Select languages that you can speak</label>
-        <br />
-        <div class="checkbox-group">
-          <input
-            type="checkbox"
-            id="language1"
-            value="English"
-            v-model="selectedLanguages"
-          />
-          <label for="language1">English</label>
-          <br />
-          <input
-            type="checkbox"
-            id="language2"
-            value="German"
-            v-model="selectedLanguages"
-          />
-          <label for="language2">German</label>
-          <br />
-          <input
-            type="checkbox"
-            id="language3"
-            value="French"
-            v-model="selectedLanguages"
-          />
-          <label for="language3">French</label>
-          <br />
-          <input
-            type="checkbox"
-            id="language4"
-            value="Spanish"
-            v-model="selectedLanguages"
-          />
-          <label for="language4">Spanish</label>
-        </div>
-      </div>
-
-      <div class="form-group">
         <label for="selectedGamerType">Select what type of gamer you are</label>
         <select
           v-model="selectedGamerType"
@@ -178,7 +140,6 @@ export default {
       selectedVoicePrograms: [],
       selectedStartTime: "",
       selectedEndTime: "",
-      selectedLanguages: [],
       selectedGamerType: "",
       isFormIncomplete: false,
       isFormSent: false,
@@ -193,7 +154,6 @@ export default {
         this.selectedVoicePrograms.length > 0 &&
         this.selectedStartTime !== "" &&
         this.selectedEndTime !== "" &&
-        this.selectedLanguages.length > 0 &&
         this.selectedGamerType !== ""
       ) {
         this.isFormIncomplete = false;
@@ -226,7 +186,7 @@ export default {
           voicePrograms: this.selectedVoicePrograms,
           startTime: this.selectedStartTime,
           endTime: this.selectedEndTime,
-          languages: this.selectedLanguages,
+
           gamerType: this.selectedGamerType,
         };
 

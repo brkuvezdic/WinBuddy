@@ -51,20 +51,6 @@
       </div>
 
       <div>
-        <label for="languageFilter">Language:</label>
-        <div class="selectable-options">
-          <span
-            v-for="language in languages"
-            :key="language"
-            :class="{ selected: selectedLanguages.includes(language) }"
-            @click="toggleLanguage(language)"
-          >
-            {{ language }}
-          </span>
-        </div>
-      </div>
-
-      <div>
         <label for="gamerTypeFilter">Gamer Type:</label>
         <div class="selectable-options">
           <span
@@ -105,10 +91,7 @@
               <div>
                 <span class="info-label">End Time:</span> {{ player.endTime }}
               </div>
-              <div>
-                <span class="info-label">Language:</span>
-                {{ player.language }}
-              </div>
+
               <div>
                 <span class="info-label">Gamer Type:</span>
                 {{ player.gamerType }}
@@ -188,7 +171,7 @@ export default {
       selectedVoicePrograms: [],
       startTime: "",
       endTime: "",
-      selectedLanguages: [],
+
       selectedGamerType: [],
       showPopupFlag: false,
       selectedPlayer: null,
@@ -223,14 +206,7 @@ export default {
       });
       return Array.from(voicePrograms);
     },
-    languages() {
-      // Extract unique languages from player information
-      const languages = new Set();
-      this.playerInfo.forEach((player) => {
-        player.languages.forEach((language) => languages.add(language));
-      });
-      return Array.from(languages);
-    },
+
     gamerTypes() {
       // Extract unique gamer types from player information
       const gamerTypes = new Set();
@@ -253,7 +229,7 @@ export default {
           voicePrograms: doc.data().voicePrograms,
           startTime: doc.data().startTime,
           endTime: doc.data().endTime,
-          languages: doc.data().languages,
+
           gamerType: doc.data().gamerType,
         };
       });
@@ -289,15 +265,7 @@ export default {
         this.selectedVoicePrograms.push(voiceProgram);
       }
     },
-    toggleLanguage(language) {
-      if (this.selectedLanguages.includes(language)) {
-        this.selectedLanguages = this.selectedLanguages.filter(
-          (lang) => lang !== language
-        );
-      } else {
-        this.selectedLanguages.push(language);
-      }
-    },
+
     showPopup(player) {
       this.selectedPlayer = player;
       this.showPopupFlag = true;
@@ -377,15 +345,6 @@ export default {
         );
       }
 
-      // Apply language filter
-      if (this.selectedLanguages.length > 0) {
-        filteredPlayers = filteredPlayers.filter((player) =>
-          this.selectedLanguages.every((lang) =>
-            player.languages.includes(lang)
-          )
-        );
-      }
-
       // Apply gamer type filter
       if (this.selectedGamerType.length > 0) {
         filteredPlayers = filteredPlayers.filter((player) =>
@@ -400,7 +359,7 @@ export default {
       this.selectedVoicePrograms = [];
       this.startTime = "";
       this.endTime = "";
-      this.selectedLanguages = [];
+
       this.selectedGamerType = [];
       this.filteredPlayers = this.playerInfo;
     },
