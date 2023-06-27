@@ -1,141 +1,172 @@
 <template>
-  <div class="find-players">
-    <h1 class="PlayersTitle">Filter players</h1>
-    <div class="filters">
-      <div>
-        <label for="gameFilter">Game:</label>
-        <div class="selectable-options">
-          <span
-            v-for="game in games"
-            :key="game"
-            :class="{ selected: selectedGames.includes(game) }"
-            @click="toggleGame(game)"
-          >
-            {{ game }}
-          </span>
+  <div>
+    <div class="find-players">
+      <h1 class="PlayersTitle">Filter players</h1>
+
+      <div class="filters">
+        <div>
+          <label for="gameFilter">Game:</label>
+          <div class="selectable-options">
+            <span
+              v-for="game in games"
+              :key="game"
+              :class="{ selected: selectedGames.includes(game) }"
+              @click="toggleGame(game)"
+            >
+              {{ game }}
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <label for="voiceProgramFilter">Voice Program:</label>
+          <div class="selectable-options">
+            <span
+              v-for="voiceProgram in voicePrograms"
+              :key="voiceProgram"
+              :class="{
+                selected: selectedVoicePrograms.includes(voiceProgram),
+              }"
+              @click="toggleVoiceProgram(voiceProgram)"
+            >
+              {{ voiceProgram }}
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <label for="startTimeFilter">Start Time:</label>
+          <input
+            type="text"
+            id="startTimeFilter"
+            v-model="startTime"
+            placeholder="Eg. 17:44"
+          />
+        </div>
+
+        <div>
+          <label for="endTimeFilter">End Time:</label>
+          <input
+            type="text"
+            id="endTimeFilter"
+            v-model="endTime"
+            placeholder="Eg. 10:43"
+          />
+        </div>
+
+        <div>
+          <label for="gamerTypeFilter">Gamer Type:</label>
+          <div class="selectable-options">
+            <span
+              v-for="gamerType in gamerTypes"
+              :key="gamerType"
+              :class="{ selected: selectedGamerType.includes(gamerType) }"
+              @click="toggleGamerType(gamerType)"
+            >
+              {{ gamerType }}
+            </span>
+          </div>
         </div>
       </div>
-
-      <div>
-        <label for="voiceProgramFilter">Voice Program:</label>
-        <div class="selectable-options">
-          <span
-            v-for="voiceProgram in voicePrograms"
-            :key="voiceProgram"
-            :class="{ selected: selectedVoicePrograms.includes(voiceProgram) }"
-            @click="toggleVoiceProgram(voiceProgram)"
-          >
-            {{ voiceProgram }}
-          </span>
-        </div>
+      <div class="centered">
+        <button class="action-button" @click="applyFilters">
+          Apply Filters
+        </button>
+        <button class="action-button" @click="resetFilters">
+          Reset Filters
+        </button>
       </div>
-
-      <div>
-        <label for="startTimeFilter">Start Time:</label>
-        <input
-          type="text"
-          id="startTimeFilter"
-          v-model="startTime"
-          placeholder="Eg. 17:44"
-        />
+      <div style="display: flex; justify-content: center; align-items: center">
+        <button
+          style="background-color: #007bff"
+          class="help-button"
+          @click="showHelp"
+        >
+          Need help?
+        </button>
       </div>
+      <div class="player-container">
+        <ul class="player-list">
+          <li v-for="player in filteredPlayers" :key="player.id">
+            <div class="player-card" @click="showPopup(player)">
+              <h3>{{ player.selectedGamertag }}</h3>
 
-      <div>
-        <label for="endTimeFilter">End Time:</label>
-        <input
-          type="text"
-          id="endTimeFilter"
-          v-model="endTime"
-          placeholder="Eg. 10:43"
-        />
-      </div>
+              <div class="player-info">
+                <div>
+                  <span class="info-label">Games:</span>
+                  {{ formatArray(player.games) }}
+                </div>
+                <div>
+                  <span class="info-label">Voice Programs:</span>
+                  {{ formatArray(player.voicePrograms) }}
+                </div>
+                <div>
+                  <span class="info-label">Start Time:</span>
+                  {{ player.startTime }}
+                </div>
+                <div>
+                  <span class="info-label">End Time:</span> {{ player.endTime }}
+                </div>
 
-      <div>
-        <label for="gamerTypeFilter">Gamer Type:</label>
-        <div class="selectable-options">
-          <span
-            v-for="gamerType in gamerTypes"
-            :key="gamerType"
-            :class="{ selected: selectedGamerType.includes(gamerType) }"
-            @click="toggleGamerType(gamerType)"
-          >
-            {{ gamerType }}
-          </span>
-        </div>
-      </div>
-    </div>
-    <div class="centered">
-      <button class="action-button" @click="applyFilters">Apply Filters</button>
-      <button class="action-button" @click="resetFilters">Reset Filters</button>
-    </div>
-
-    <div class="player-container">
-      <ul class="player-list">
-        <li v-for="player in filteredPlayers" :key="player.id">
-          <div class="player-card" @click="showPopup(player)">
-            <h3>{{ player.selectedGamertag }}</h3>
-
-            <div class="player-info">
-              <div>
-                <span class="info-label">Games:</span>
-                {{ formatArray(player.games) }}
-              </div>
-              <div>
-                <span class="info-label">Voice Programs:</span>
-                {{ formatArray(player.voicePrograms) }}
-              </div>
-              <div>
-                <span class="info-label">Start Time:</span>
-                {{ player.startTime }}
-              </div>
-              <div>
-                <span class="info-label">End Time:</span> {{ player.endTime }}
-              </div>
-
-              <div>
-                <span class="info-label">Gamer Type:</span>
-                {{ player.gamerType }}
+                <div>
+                  <span class="info-label">Gamer Type:</span>
+                  {{ player.gamerType }}
+                </div>
               </div>
             </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+          </li>
+        </ul>
+      </div>
 
-    <!-- Popup -->
-    <div v-if="showPopupFlag" class="popup">
-      <div class="popup-content">
-        <h2>{{ selectedPlayer.selectedGamertag }}</h2>
-        <p>Additional information: {{ selectedPlayer.additionalInfo }}</p>
+      <!-- Popup -->
+      <div v-if="showPopupFlag" class="popup">
+        <div class="popup-content">
+          <h2>{{ selectedPlayer.selectedGamertag }}</h2>
+          <p>Additional information: {{ selectedPlayer.additionalInfo }}</p>
 
-        <form @submit.prevent="searchPlayer">
-          <input
-            v-model="summonerName"
-            type="text"
-            placeholder="Enter Summoner Name"
+          <form @submit.prevent="searchPlayer">
+            <input
+              v-model="summonerName"
+              type="text"
+              placeholder="Enter Summoner Name"
+            />
+            <button type="submit">Enter</button>
+          </form>
+
+          <h1 v-if="selectedPlayer.summonerLevel">
+            Summoner Level: {{ selectedPlayer.summonerLevel }}
+          </h1>
+
+          <h1
+            v-if="
+              !selectedPlayer.summonerLevel && !selectedPlayer.profileIconUrl
+            "
+          >
+            No user found.
+          </h1>
+
+          <h1 v-if="selectedPlayer.profileIconUrl">Profile icon:</h1>
+
+          <img
+            v-if="selectedPlayer.profileIconUrl"
+            :src="selectedPlayer.profileIconUrl"
+            alt="Profile Icon"
           />
-          <button type="submit">Enter</button>
-        </form>
 
-        <h1 v-if="selectedPlayer.summonerLevel">
-          Summoner Level: {{ selectedPlayer.summonerLevel }}
-        </h1>
-
-        <h1
-          v-if="!selectedPlayer.summonerLevel && !selectedPlayer.profileIconUrl"
-        >
-          No user found.
-        </h1>
-
-        <h1 v-if="selectedPlayer.profileIconUrl">Profile icon:</h1>
-
-        <img
-          v-if="selectedPlayer.profileIconUrl"
-          :src="selectedPlayer.profileIconUrl"
-          alt="Profile Icon"
-        />
-
-        <button @click="closePopup">Close</button>
+          <button class="apiclosebutton" @click="closePopup">Close</button>
+        </div>
+      </div>
+    </div>
+    <div v-if="showHelpPopup" class="help-popup">
+      <div class="popup-content">
+        <h2>Short guide</h2>
+        <p>
+          Below this message are all registered players. Using Riot Games API,
+          we support finding accounts for North America League of Legends
+          players only. Click on one of the players and write their gamertag to
+          see if they are registerd on League of Legends North America region
+        </p>
+        <button class="close-button" @click="closeHelp">Okay thanks!</button>
       </div>
     </div>
   </div>
@@ -171,7 +202,7 @@ export default {
       selectedVoicePrograms: [],
       startTime: "",
       endTime: "",
-
+      showHelpPopup: false,
       selectedGamerType: [],
       showPopupFlag: false,
       selectedPlayer: null,
@@ -247,6 +278,12 @@ export default {
 
     formatArray(arr) {
       return arr.length > 0 ? arr.join(", ") : "N/A";
+    },
+    showHelp() {
+      this.showHelpPopup = true;
+    },
+    closeHelp() {
+      this.showHelpPopup = false;
     },
 
     toggleGame(game) {
@@ -772,5 +809,81 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.help-button {
+  margin-bottom: 10px;
+  padding: 8px 16px;
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.help-button:hover {
+  background-color: #e0e0e0;
+}
+
+.help-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.help-popup .popup-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.help-popup .popup-content h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.help-popup .popup-content p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.help-popup .popup-content .close-button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.help-popup .popup-content .close-button:hover {
+  background-color: #e0e0e0;
+}
+
+.apiclosebutton {
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.apiclosebutton:hover {
+  background-color: darkorange;
 }
 </style>

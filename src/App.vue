@@ -281,7 +281,6 @@ export default {
       this.$router.replace({ path: "/news" });
     },
   },
-
   beforeCreate() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -298,6 +297,11 @@ export default {
         console.log("No user");
         store.currentUser = null;
         this.isAuthenticated = false;
+
+        // Redirect to login page if accessing a protected route
+        if (this.$route.path !== "/login" && this.$route.path !== "/register") {
+          this.$router.push({ path: "/login" });
+        }
       }
     });
   },

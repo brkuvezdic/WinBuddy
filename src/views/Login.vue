@@ -33,6 +33,14 @@
               Submit
             </button>
           </form>
+          <h3>New to here? Register instead</h3>
+          <v-btn
+            color="primary"
+            class="navbar-button"
+            @click="navigatetoregister"
+          >
+            Register
+          </v-btn>
         </div>
 
         <div class="col-sm"></div>
@@ -104,6 +112,9 @@ export default {
             this.showErrorMessage = true;
           }
         });
+    },
+    navigatetoregister() {
+      this.$router.replace({ path: "/register" });
     },
   },
 };

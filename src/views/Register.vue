@@ -49,6 +49,14 @@
             <button type="button" @click="register" class="btn btn-primary">
               Submit
             </button>
+            <h3>Already an user? Login instead</h3>
+            <v-btn
+              color="primary"
+              class="navbar-button"
+              @click="navigatetologin"
+            >
+              Login
+            </v-btn>
             <v-dialog v-model="showErrorMessage" persistent max-width="400">
               <v-card>
                 <v-card-title class="headline">Error</v-card-title>
@@ -149,6 +157,9 @@ export default {
         .catch((error) => {
           console.error("Doslo je do greske", error);
         });
+    },
+    navigatetologin() {
+      this.$router.replace({ path: "/login" });
     },
   },
 };
