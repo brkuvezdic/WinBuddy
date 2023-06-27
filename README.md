@@ -22,6 +22,6 @@ Koristeći API od Riot Portala, ostvaruje se komunkacija. Ta komunikacija nam om
 
 - Link na video: https://youtu.be/lJOm3glj0ZE
 
-- Javni URL aplikacije: https://win-buddy.vercel.app/login
+- Javni URL aplikacije: win-buddy.vercel.app
 
 - Zaduženja (planirana) po članu tima - Branimir Kuveždić izrađuje i implementira cijelokupnu aplikaciju
