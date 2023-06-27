@@ -63,11 +63,7 @@
                 <v-card-text>
                   <p>{{ errorMessage }}</p>
                 </v-card-text>
-                <v-card-actions>
-                  <v-btn color="primary" @click="showErrorMessage = false"
-                    >OK</v-btn
-                  >
-                </v-card-actions>
+                <v-card-actions> </v-card-actions>
               </v-card>
             </v-dialog>
           </form>
@@ -130,14 +126,14 @@ export default {
     register() {
       if (!this.validateEmail(this.email)) {
         this.errorMessage = "Invalid email format. E.g. MyeMail@gmail.com";
-        this.showErrorMessage = true;
+        this.showErrorMessage = false;
         return;
       }
 
       if (this.password !== this.passwordRepeat) {
         console.error("Passwords do not match");
         this.errorMessage = "Passwords do not match";
-        this.showErrorMessage = true;
+        this.showErrorMessage = false;
         return;
       }
 
