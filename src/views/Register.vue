@@ -124,12 +124,6 @@ export default {
       return emailRegex.test(email);
     },
     register() {
-      if (!this.validateEmail(this.email)) {
-        this.errorMessage = "Invalid email format. E.g. MyeMail@gmail.com";
-        this.showErrorMessage = false;
-        return;
-      }
-
       if (this.password !== this.passwordRepeat) {
         console.error("Passwords do not match");
         this.errorMessage = "Passwords do not match";
