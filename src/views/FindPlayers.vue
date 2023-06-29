@@ -164,7 +164,9 @@
           Below this message are all registered players. Using Riot Games API,
           we support finding accounts for North America League of Legends
           players only. Click on one of the players and write their gamertag to
-          see if they are registerd on League of Legends North America region
+          see if they are registerd on League of Legends North America region.
+          Side note: "I have to manually update my Riot API every 24 hrs, so
+          this feature my now always be available"
         </p>
         <button class="close-button" @click="closeHelp">Okay thanks!</button>
       </div>
@@ -190,7 +192,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import axios from "axios";
-const API_KEY = "RGAPI-2463d900-b668-4985-998b-ddbb56490e10";
+const API_KEY = "RGAPI-a2b36d56-cab7-4a6c-8576-fbbc13641041";
 
 export default {
   name: "FindPlayers",
