@@ -6,6 +6,8 @@
 
 - Mentor: doc. dr. sc. Nikola Tanković (ntankovic.unipu.hr)
 
+-Završna ocjena projekta: 5
+
 - Kratki opis funkcionalnosti:
 
   Aplikacija "WinBuddy" služi za traženje suigrača u videoigrama.
