@@ -166,7 +166,7 @@
           players only. Click on one of the players and write their gamertag to
           see if they are registerd on League of Legends North America region.
           Side note: "I have to manually update my Riot API every 24 hrs, so
-          this feature my now always be available"
+          this feature may not always be available"
         </p>
         <button class="close-button" @click="closeHelp">Okay thanks!</button>
       </div>
