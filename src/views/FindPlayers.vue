@@ -192,7 +192,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import axios from "axios";
-const API_KEY = "RGAPI-58a622bf-7460-4a27-a9d6-eb00769d0a7a";
+const API_KEY = "RGAPI-af1954bd-b7b8-46ae-a927-758f301437fb";
 
 export default {
   name: "FindPlayers",
