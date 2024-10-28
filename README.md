@@ -1,29 +1,18 @@
-- WinBuddy - Sastav tima:Branimir Kuveždić
+WinBuddy - Branimir Kuveždić
 
-- Fakultet informatike u Puli (https://fipu.unipu.hr/)
 
-- Kolegij: Programsko inženjerstvo (ntankovic.unipu.hr/pi)
+The "WinBuddy" app is designed to help users find teammates for video games.
 
-- Mentor: doc. dr. sc. Nikola Tanković (ntankovic.unipu.hr)
+WinBuddy serves as a platform for finding friends to play video games. After registering and editing their profile, users can filter other players on the platform.
 
-- Završna ocjena projekta: 5
+For example, a user may search for players who play League of Legends and F1@2023, use Discord, and play from 21:00 to 23:00.
 
-- Kratki opis funkcionalnosti:
+Using the filter, matching players are displayed. Additionally, by clicking on any player's profile, a search engine for League of Legends players opens.
 
-  Aplikacija "WinBuddy" služi za traženje suigrača u videoigrama.
+The app uses Riot's API to enable communication, allowing players to search by gamertag. Currently, the app can only search for League of Legends players in the NA (North America) region. There is also a section showcasing the top esports team of 2023.
 
-Aplikacija WinBuddy služi kao platforma za pronalaženje prijatelja za videoigrice. Platforma je osmišljena tako da korisnik nakon registracije i uređivanja profila, filtrira sve ostale igrače na platformi.
+Link to public prototype: [Figma Prototype] https://www.figma.com/proto/aS8Gau232ZV3De8O9414FN/WinBuddy-prototype-Branimir-Kuve%C5%BEdi%C4%87?node-id=5-357&scaling=scale-down
 
-Primjerice, korisnik traži igrače koji igraju League of Legends i F1@2023, koriste Discord i igraju od 21:00 do 23:00.
+Link to video: [YouTube Video](https://www.youtube.com/watch?v=lJOm3glj0ZE)
 
-Koristeći se filtrom, prikazuju se igrači. Također, pritiskom na bilo koji od profila igrača, otvara se tražilica za League of Legends igrače.
-
-Koristeći API od Riot Portala, ostvaruje se komunkacija. Ta komunikacija nam omogućava da pretražimo unosom gamertag-a. Aplikacija može pretraživati samo League of Legends igrače na NA( North America) regiji. Također postoji i dio za pregled najboljeg esports tima 2023
-
-- Link na javni prototip:https://www.figma.com/proto/aS8Gau232ZV3De8O9414FN/WinBuddy-prototype-Branimir-Kuve%C5%BEdi%C4%87?node-id=5-357&scaling=scale-down
-
-- Link na video: https://youtu.be/lJOm3glj0ZE
-
-- Javni URL aplikacije: https://win-buddy.vercel.app/
-
-- Zaduženja (planirana) po članu tima - Branimir Kuveždić izrađuje i implementira cijelokupnu aplikaciju
+Public URL of the app: [WinBuddy](https://win-buddy.vercel.app/login)
